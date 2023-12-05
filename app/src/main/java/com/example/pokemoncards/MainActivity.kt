@@ -1,7 +1,6 @@
 package com.example.pokemoncards
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -9,12 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,30 +18,23 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Spa
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
@@ -58,7 +46,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -77,7 +64,6 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.spec.DestinationStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -110,7 +96,6 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen(
     navigator: DestinationsNavigator
 ){
-    //navigator.navigate(LoginScreenDestination)
     when (PokemonCardsApp.windowsize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
             navigator.navigate(SearchScreenDestination)
@@ -119,8 +104,6 @@ fun HomeScreen(
         }
     }
 }
-
-
 
 @Destination
 @Composable
@@ -133,8 +116,7 @@ fun SearchScreen(
 
     Scaffold (
         topBar = {SearchBar()},
-        //bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
-        bottomBar = {BottomNavigation(destinationsNavigator = destinationsNavigator)}
+          bottomBar = {BottomNavigation(destinationsNavigator = destinationsNavigator)}
     ){ innerPadding ->
         Box(modifier = Modifier
             .padding(innerPadding)
@@ -143,39 +125,9 @@ fun SearchScreen(
     }
 }
 
-// @Destination
-// @Composable
-// fun SearchLandscapeScreen(
-//     destinationsNavigator: DestinationsNavigator
-// ){
-//     Surface(color = MaterialTheme.colorScheme.background) {
-//         Row {
-//             NavigationVButton(destinationsNavigator = destinationsNavigator)
-//             SearchBar()
-//         }
-//     }
-
-//     val background = if(PokemonCardsApp.isLoginSuccessful)
-//                     MaterialTheme.colorScheme.primaryContainer
-//                     else MaterialTheme.colorScheme.background
-
-//     Scaffold (
-//         topBar = {SearchBar()},
-//         bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
-//     ){ innerPadding ->
-//         Box(modifier = Modifier
-//             .padding(innerPadding)
-//             .background(color = background)){
-//             CardList( destinationsNavigator = destinationsNavigator)}
-//      }
-
-// }
-
 @Composable
 fun CardList(destinationsNavigator: DestinationsNavigator){
-
     val viewModel = viewModel{ PokemonViewModel() }
-
     if (viewModel.isLoading)
         {
             Box(modifier = Modifier
@@ -291,47 +243,10 @@ fun SearchBar(
     )
 }
 
-/*
-@Composable
-fun Bottom_bar(destinationsNavigator: DestinationsNavigator){
-    val viewModel = viewModel{ PokemonViewModel() }
-    val context = LocalContext.current
-
-    BottomAppBar {
-        if(!PokemonCardsApp.isLoginSuccessful)
-            IconButton(onClick = { destinationsNavigator.navigate(LoginScreenDestination) }) {
-                    Icon(imageVector = Icons.Default.Login, contentDescription = stringResource(id = R.string.desc_login))
-            }
-        else
-        {
-
-            IconButton(onClick = {destinationsNavigator.navigate(LoginScreenDestination)}) {
-                Icon(Icons.Filled.Search, contentDescription = stringResource(id = R.string.desc_search))
-            }
-
-            IconButton(onClick = { viewModel.Favourites() })
-            {
-                Icon(Icons.Filled.Favorite, contentDescription = stringResource(id = R.string.desc_favorities))
-            }
-
-            IconButton(onClick = {
-                Toast.makeText(context, "Signed out", Toast.LENGTH_SHORT).show()
-                PokemonCardsApp.isLoginSuccessful = false
-                destinationsNavigator.navigate(SearchScreenDestination)
-            })
-            {
-                Icon(Icons.Default.Logout, contentDescription = stringResource(id = R.string.desc_logout))
-            }
-        }
-    }
-}
-*/
-
 @Composable
 private fun BottomNavigation(modifier: Modifier = Modifier, destinationsNavigator: DestinationsNavigator) {
     val viewModel = viewModel{ PokemonViewModel() }
 
-    val context = LocalContext.current
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         modifier = modifier
@@ -369,57 +284,6 @@ private fun BottomNavigation(modifier: Modifier = Modifier, destinationsNavigato
                         destinationsNavigator.navigate(SearchScreenDestination)
                     }
             )
-        }
-    }
-}
-
-@Composable
-private fun NavigationVButton(modifier: Modifier = Modifier, destinationsNavigator: DestinationsNavigator) {
-    val viewModel = viewModel{ PokemonViewModel() }
-
-    NavigationRail(
-        modifier = modifier.padding(start = 8.dp, end = 8.dp),
-        containerColor = MaterialTheme.colorScheme.background,
-    ) {
-        Column(
-            modifier = modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if(!PokemonCardsApp.isLoginSuccessful){
-                NavigationRailItem(
-                    icon = {Icon(imageVector = Icons.Default.Login,contentDescription = null)},
-                    label = {Text(stringResource(R.string.desc_login))},
-                    selected = true,
-                    onClick = { destinationsNavigator.navigate(LoginScreenDestination)}
-                )
-            }
-            else {
-                NavigationRailItem(
-                    icon = {Icon(imageVector = Icons.Default.Search,contentDescription = null)},
-                    label = {Text(stringResource(R.string.desc_search))},
-                    selected = false,
-                    onClick = {destinationsNavigator.navigate(LoginScreenDestination)}
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                NavigationRailItem(
-                    icon = {Icon(imageVector = Icons.Default.Favorite,contentDescription = null)},
-                    label = {Text(stringResource(R.string.desc_favorities))},
-                    selected = false,
-                    onClick = {viewModel.Favourites()}
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                NavigationRailItem(
-                    icon = {Icon(imageVector = Icons.Default.Logout, contentDescription = null)},
-                    label = {Text(stringResource(R.string.desc_logout))},
-                    selected = false,
-                    onClick =
-                    {
-                        PokemonCardsApp.isLoginSuccessful = false
-                        destinationsNavigator.navigate(SearchScreenDestination)
-                    }
-                )
-            }
         }
     }
 }
