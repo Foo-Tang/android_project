@@ -45,6 +45,7 @@ import com.example.pokemoncards.PokemonCardsApp
 import com.example.pokemoncards.R
 import com.example.pokemoncards.destinations.SearchScreenDestination
 import com.example.pokemoncards.destinations.SignUpScreenDestination
+import com.example.pokemoncards.destinations.HomeScreenDestination
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.ramcosta.composedestinations.annotation.Destination
@@ -73,7 +74,8 @@ fun LoginScreen(destinationsNavigator: DestinationsNavigator) {
         ) {
             Spacer(Modifier.height(100.dp))
             if (PokemonCardsApp.isLoginSuccessful) {
-                destinationsNavigator.navigate(SearchScreenDestination)
+                //destinationsNavigator.navigate(SearchScreenDestination)
+                destinationsNavigator.navigate(HomeScreenDestination)
             }else{
                 LoginSection(Modifier.padding(horizontal = 16.dp), destinationsNavigator)
             }
@@ -130,7 +132,8 @@ fun LoginSection(
                                     PokemonCardsApp.currentUserId = userid
                                     Toast.makeText(context, "Login success", Toast.LENGTH_SHORT)
                                         .show()
-                                    destinationsNavigator.navigate(SearchScreenDestination)
+                                    //destinationsNavigator.navigate(SearchScreenDestination)
+                                    destinationsNavigator.navigate(HomeScreenDestination)
                                 } else {
                                     Toast.makeText(context, "Login fail", Toast.LENGTH_SHORT).show()
                                 }

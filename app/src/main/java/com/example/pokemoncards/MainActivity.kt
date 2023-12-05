@@ -70,7 +70,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.pokemoncards.destinations.CardDetailDestination
+import com.example.pokemoncards.destinations.HomeScreenDestination
 import com.example.pokemoncards.destinations.LoginScreenDestination
+import com.example.pokemoncards.destinations.SearchLandscapeScreenDestination
 import com.example.pokemoncards.destinations.SearchScreenDestination
 import com.example.pokemoncards.ui.theme.PokemonCardsTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -90,7 +92,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
             setContent {
                 PokemonCardsApp.windowsize = calculateWindowSizeClass(activity = this)
-                PokemonCardsTheme {
+/*                PokemonCardsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
@@ -98,7 +100,8 @@ class MainActivity : ComponentActivity() {
                         DestinationsNavHost(navGraph = NavGraphs.root)
                     }
 
-                }
+                }*/
+                DestinationsNavHost(navGraph = NavGraphs.root)
             }
         }
     }
@@ -116,6 +119,7 @@ fun HomeScreen(
             navigator.navigate(SearchScreenDestination)
         }
         WindowWidthSizeClass.Expanded -> {
+            navigator.navigate(SearchLandscapeScreenDestination)
         }
     }
 }
@@ -127,49 +131,51 @@ fun HomeScreen(
 fun SearchScreen(
     destinationsNavigator: DestinationsNavigator
 ){
-     val background = if(PokemonCardsApp.isLoginSuccessful)
-                 MaterialTheme.colorScheme.primaryContainer
-                 else MaterialTheme.colorScheme.background
+    PokemonCardsTheme {
+        val background = if (PokemonCardsApp.isLoginSuccessful)
+            MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.background
 
-    Scaffold (
-        topBar = {SearchBar()},
-        //bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
-        bottomBar = {BottomNavigation(destinationsNavigator = destinationsNavigator)}
-    ){ innerPadding ->
-        Box(modifier = Modifier
-            .padding(innerPadding)
-            .background(color = background)){
-            CardList( destinationsNavigator = destinationsNavigator)}
+        Scaffold(
+            topBar = { SearchBar() },
+            //bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
+            bottomBar = { BottomNavigation(destinationsNavigator = destinationsNavigator) }
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .background(color = background)
+            ) {
+                CardList(destinationsNavigator = destinationsNavigator)
+            }
+        }
     }
 }
 
-// @Destination
-// @Composable
-// fun SearchLandscapeScreen(
-//     destinationsNavigator: DestinationsNavigator
-// ){
-//     Surface(color = MaterialTheme.colorScheme.background) {
-//         Row {
-//             NavigationVButton(destinationsNavigator = destinationsNavigator)
-//             SearchBar()
-//         }
-//     }
+ @Destination
+ @Composable
+ fun SearchLandscapeScreen(
+     destinationsNavigator: DestinationsNavigator
+ ){
+     PokemonCardsTheme {
+         val background = if (PokemonCardsApp.isLoginSuccessful)
+             MaterialTheme.colorScheme.primaryContainer
+         else MaterialTheme.colorScheme.background
 
-//     val background = if(PokemonCardsApp.isLoginSuccessful)
-//                     MaterialTheme.colorScheme.primaryContainer
-//                     else MaterialTheme.colorScheme.background
+         Surface(color = background) {
+             Row {
+                 SideNavigation(destinationsNavigator = destinationsNavigator)
+                 Column(modifier = Modifier
+                     .background(color = background)
+                 ) {
+                     SearchBar()
+                     CardList(destinationsNavigator = destinationsNavigator)
+                 }
+             }
+         }
+     }
 
-//     Scaffold (
-//         topBar = {SearchBar()},
-//         bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
-//     ){ innerPadding ->
-//         Box(modifier = Modifier
-//             .padding(innerPadding)
-//             .background(color = background)){
-//             CardList( destinationsNavigator = destinationsNavigator)}
-//      }
-
-// }
+ }
 
 @Composable
 fun CardList(destinationsNavigator: DestinationsNavigator){
@@ -366,7 +372,8 @@ private fun BottomNavigation(modifier: Modifier = Modifier, destinationsNavigato
                 onClick =
                     {
                         PokemonCardsApp.isLoginSuccessful = false
-                        destinationsNavigator.navigate(SearchScreenDestination)
+                        //destinationsNavigator.navigate(SearchScreenDestination)
+                        destinationsNavigator.navigate(HomeScreenDestination)
                     }
             )
         }
@@ -374,7 +381,7 @@ private fun BottomNavigation(modifier: Modifier = Modifier, destinationsNavigato
 }
 
 @Composable
-private fun NavigationVButton(modifier: Modifier = Modifier, destinationsNavigator: DestinationsNavigator) {
+private fun SideNavigation(modifier: Modifier = Modifier, destinationsNavigator: DestinationsNavigator) {
     val viewModel = viewModel{ PokemonViewModel() }
 
     NavigationRail(
@@ -416,7 +423,8 @@ private fun NavigationVButton(modifier: Modifier = Modifier, destinationsNavigat
                     onClick =
                     {
                         PokemonCardsApp.isLoginSuccessful = false
-                        destinationsNavigator.navigate(SearchScreenDestination)
+                        //destinationsNavigator.navigate(SearchScreenDestination)
+                        destinationsNavigator.navigate(HomeScreenDestination)
                     }
                 )
             }
