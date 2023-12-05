@@ -45,7 +45,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -82,9 +85,11 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
             setContent {
+                PokemonCardsApp.windowsize = calculateWindowSizeClass(activity = this)
                 PokemonCardsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
@@ -100,13 +105,19 @@ class MainActivity : ComponentActivity() {
 
 
 @RootNavGraph(start = true)
-@Destination()
+@Destination
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator
 ){
     //navigator.navigate(LoginScreenDestination)
-    navigator.navigate(SearchScreenDestination)
+    when (PokemonCardsApp.windowsize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            navigator.navigate(SearchScreenDestination)
+        }
+        WindowWidthSizeClass.Expanded -> {
+        }
+    }
 }
 
 
@@ -116,17 +127,20 @@ fun HomeScreen(
 fun SearchScreen(
     destinationsNavigator: DestinationsNavigator
 ){
+     val background = if(PokemonCardsApp.isLoginSuccessful)
+                 MaterialTheme.colorScheme.primaryContainer
+                 else MaterialTheme.colorScheme.background
 
-        Scaffold (
-            topBar = {SearchBar()},
-            //bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
-            bottomBar = {BottomNavigation(destinationsNavigator = destinationsNavigator)}
-        ){ innerPadding ->
-            Box(modifier = Modifier
-                .padding(innerPadding)
-                .background(color = MaterialTheme.colorScheme.background)){
-                CardList( destinationsNavigator = destinationsNavigator)}
-        }
+    Scaffold (
+        topBar = {SearchBar()},
+        //bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
+        bottomBar = {BottomNavigation(destinationsNavigator = destinationsNavigator)}
+    ){ innerPadding ->
+        Box(modifier = Modifier
+            .padding(innerPadding)
+            .background(color = background)){
+            CardList( destinationsNavigator = destinationsNavigator)}
+    }
 }
 
 // @Destination
