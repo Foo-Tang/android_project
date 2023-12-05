@@ -116,6 +116,7 @@ fun HomeScreen(
 fun SearchScreen(
     destinationsNavigator: DestinationsNavigator
 ){
+
         Scaffold (
             topBar = {SearchBar()},
             //bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
@@ -128,18 +129,33 @@ fun SearchScreen(
         }
 }
 
-@Destination
-@Composable
-fun SearchLandscapeScreen(
-    destinationsNavigator: DestinationsNavigator
-){
-    Surface(color = MaterialTheme.colorScheme.background) {
-        Row {
-            NavigationVButton(destinationsNavigator = destinationsNavigator)
-            SearchBar()
-        }
-    }
-}
+// @Destination
+// @Composable
+// fun SearchLandscapeScreen(
+//     destinationsNavigator: DestinationsNavigator
+// ){
+//     Surface(color = MaterialTheme.colorScheme.background) {
+//         Row {
+//             NavigationVButton(destinationsNavigator = destinationsNavigator)
+//             SearchBar()
+//         }
+//     }
+
+//     val background = if(PokemonCardsApp.isLoginSuccessful)
+//                     MaterialTheme.colorScheme.primaryContainer
+//                     else MaterialTheme.colorScheme.background
+
+//     Scaffold (
+//         topBar = {SearchBar()},
+//         bottomBar = { Bottom_bar(destinationsNavigator = destinationsNavigator)}
+//     ){ innerPadding ->
+//         Box(modifier = Modifier
+//             .padding(innerPadding)
+//             .background(color = background)){
+//             CardList( destinationsNavigator = destinationsNavigator)}
+//      }
+
+// }
 
 @Composable
 fun CardList(destinationsNavigator: DestinationsNavigator){
@@ -172,6 +188,7 @@ fun CardList(destinationsNavigator: DestinationsNavigator){
             columns = GridCells.Adaptive(100.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxSize()
             //contentPadding = PaddingValues(10.dp)
         )
         {
@@ -239,7 +256,7 @@ fun SearchBar(
             focusedContainerColor = MaterialTheme.colorScheme.surface
         ),
         placeholder = {
-            Text(stringResource(R.string.placeholder_search))
+            Text("Search Cards by Name")
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions (onSearch = {
@@ -264,6 +281,7 @@ fun SearchBar(
 @Composable
 fun Bottom_bar(destinationsNavigator: DestinationsNavigator){
     val viewModel = viewModel{ PokemonViewModel() }
+    val context = LocalContext.current
 
     BottomAppBar {
         if(!PokemonCardsApp.isLoginSuccessful)
@@ -283,6 +301,7 @@ fun Bottom_bar(destinationsNavigator: DestinationsNavigator){
             }
 
             IconButton(onClick = {
+                Toast.makeText(context, "Signed out", Toast.LENGTH_SHORT).show()
                 PokemonCardsApp.isLoginSuccessful = false
                 destinationsNavigator.navigate(SearchScreenDestination)
             })
