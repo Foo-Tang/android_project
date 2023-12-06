@@ -170,6 +170,29 @@ fun LoginSection(
                     color = Color.Blue
                 )
             )
+            Text(text = ".", color = Color.Gray)
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+//            Text(
+//                text = "Want to use it without an account?",
+//                color = Color.Gray
+//            )
+            ClickableText(
+                text = AnnotatedString(" Back To Search"),
+                onClick = { _ ->
+                    destinationsNavigator.navigate(SearchScreenDestination)
+                },
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Blue
+                )
+            )
+            Text(text = ".", color = Color.Gray)
         }
     }
 }
