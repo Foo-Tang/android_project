@@ -125,9 +125,9 @@ fun CardDetail(
                                             Text(text = name)
                                             val detail = value.toMap()
                                             if (detail != null) {
-                                                for ((name, value) in detail) {
-                                                    value?.let {
-                                                        Text(text = "${name}: $$value")
+                                                for ((pricepoint, price) in detail) {
+                                                    price?.let {
+                                                        Text(text = "${pricepoint}: $$price")
                                                     }
                                                 }
                                             }
@@ -142,67 +142,3 @@ fun CardDetail(
             }
         }
     }
-
-//@Composable
-//fun FavoriteIcon(card: Data, modifier: Modifier = Modifier) {
-//    var isFavorite by remember { mutableStateOf(false) }
-//    val context = LocalContext.current
-//    // Retrieve and check card marked as favorite card
-//    val db = Firebase.firestore
-//    db.collection("favorites").document(card.id + PokemonCardsApp.currentUserId).get()
-//        .addOnSuccessListener{document->
-//            if (document != null){
-//                var cardid = document.data?.get("id")
-//                isFavorite = (cardid == card.id)
-//            }
-//        }
-//
-//    Column(
-//        modifier = modifier,
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Top
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 8.dp),
-//            horizontalArrangement = Arrangement.End
-//        ) {
-//            IconButton(
-//                onClick = {
-//
-//                    // Remove the record from database
-//                    if (isFavorite) {
-//
-//                        db.collection("favorites").document(card.id + PokemonCardsApp.currentUserId).delete()
-//                            .addOnSuccessListener {
-//                                Toast.makeText(context, "Remove success", Toast.LENGTH_SHORT).show()
-//                            }
-//                            .addOnFailureListener{
-//                                    exception -> Toast.makeText(context, "Remove failure", Toast.LENGTH_SHORT).show()
-//                            }
-//                    }else{
-//                        // Add a record to database
-//                        db.collection("favorites").document(card.id + PokemonCardsApp.currentUserId).set(card)
-//                            .addOnSuccessListener {
-//                                Toast.makeText(context, "Insert success", Toast.LENGTH_SHORT).show()
-//                            }
-//                            .addOnFailureListener{
-//                                    exception -> Toast.makeText(context, "Insert failure", Toast.LENGTH_SHORT).show()
-//                            }
-//                    }
-//                    isFavorite = !isFavorite
-//                }
-//            ) {
-//                Icon(
-//                    painter = if (isFavorite) {
-//                        painterResource(id = R.drawable.baseline_favorite_24)
-//                    } else {
-//                        painterResource(id = R.drawable.baseline_favorite_border_24)
-//                    },
-//                    contentDescription = "Favorite Icon"
-//                )
-//            }
-//        }
-//    }
-//}
