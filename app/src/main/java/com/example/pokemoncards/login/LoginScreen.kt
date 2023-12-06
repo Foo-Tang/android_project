@@ -178,12 +178,12 @@ fun LoginSection(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Want to use it without an account?",
-                color = Color.Gray
-            )
+//            Text(
+//                text = "Want to use it without an account?",
+//                color = Color.Gray
+//            )
             ClickableText(
-                text = AnnotatedString(" Try it"),
+                text = AnnotatedString(" Back To Search"),
                 onClick = { _ ->
                     destinationsNavigator.navigate(SearchScreenDestination)
                 },
