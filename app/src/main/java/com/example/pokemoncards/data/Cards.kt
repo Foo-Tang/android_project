@@ -1,4 +1,4 @@
-package com.example.pokemoncards
+package com.example.pokemoncards.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -23,7 +23,7 @@ data class Data(
     val artist: String? = null,
     val rarity: String? = null,
     val flavorText: String? = null,
-    val images: Images= Images(),
+    val images: Images = Images(),
     val tcgplayer: Tcgplayer? = null,
 ){
     // Secondary constructor with no parameters

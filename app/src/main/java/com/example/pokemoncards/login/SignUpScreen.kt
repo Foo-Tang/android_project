@@ -42,7 +42,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pokemoncards.R
-import com.example.pokemoncards.User
+import com.example.pokemoncards.data.User
 import com.example.pokemoncards.destinations.LoginScreenDestination
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
