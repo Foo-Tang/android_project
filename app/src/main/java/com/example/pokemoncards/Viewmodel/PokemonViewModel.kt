@@ -1,10 +1,12 @@
-package com.example.pokemoncards
+package com.example.pokemoncards.Viewmodel
 
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.pokemoncards.PokemonCardsApp
+import com.example.pokemoncards.data.Data
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -23,7 +25,8 @@ class PokemonViewModel: ViewModel(){
                     for (document in documents) {
                         if (document.id.substring(
                                 document.id.length - PokemonCardsApp.currentUserId.length) ==
-                            PokemonCardsApp.currentUserId) {
+                            PokemonCardsApp.currentUserId
+                        ) {
                             val favoriteCard = document.toObject(Data::class.java)
                             favoriteList.add(favoriteCard)
                         }

@@ -1,6 +1,5 @@
-package com.example.pokemoncards
+package com.example.pokemoncards.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,21 +22,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.pokemoncards.PokemonCardsApp
+import com.example.pokemoncards.common.FavoriteIcon
+import com.example.pokemoncards.data.Data
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -130,9 +125,9 @@ fun CardDetail(
                                             Text(text = name)
                                             val detail = value.toMap()
                                             if (detail != null) {
-                                                for ((name, value) in detail) {
-                                                    value?.let {
-                                                        Text(text = "${name}: $$value")
+                                                for ((pricepoint, price) in detail) {
+                                                    price?.let {
+                                                        Text(text = "${pricepoint}: $$price")
                                                     }
                                                 }
                                             }
@@ -147,68 +142,3 @@ fun CardDetail(
             }
         }
     }
-
-
-@Composable
-fun FavoriteIcon(card: Data, modifier: Modifier = Modifier) {
-    var isFavorite by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    // Retrieve and check card marked as favorite card
-    val db = Firebase.firestore
-    db.collection("favorites").document(card.id + PokemonCardsApp.currentUserId).get()
-        .addOnSuccessListener{document->
-            if (document != null){
-                var cardid = document.data?.get("id")
-                isFavorite = (cardid == card.id)
-            }
-        }
-
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            IconButton(
-                onClick = {
-
-                    // Remove the record from database
-                    if (isFavorite) {
-
-                        db.collection("favorites").document(card.id + PokemonCardsApp.currentUserId).delete()
-                            .addOnSuccessListener {
-                                Toast.makeText(context, "Remove success", Toast.LENGTH_SHORT).show()
-                            }
-                            .addOnFailureListener{
-                                    exception -> Toast.makeText(context, "Remove failure", Toast.LENGTH_SHORT).show()
-                            }
-                    }else{
-                        // Add a record to database
-                        db.collection("favorites").document(card.id + PokemonCardsApp.currentUserId).set(card)
-                            .addOnSuccessListener {
-                                Toast.makeText(context, "Insert success", Toast.LENGTH_SHORT).show()
-                            }
-                            .addOnFailureListener{
-                                    exception -> Toast.makeText(context, "Insert failure", Toast.LENGTH_SHORT).show()
-                            }
-                    }
-                    isFavorite = !isFavorite
-                }
-            ) {
-                Icon(
-                    painter = if (isFavorite) {
-                        painterResource(id = R.drawable.baseline_favorite_24)
-                    } else {
-                        painterResource(id = R.drawable.baseline_favorite_border_24)
-                    },
-                    contentDescription = "Favorite Icon"
-                )
-            }
-        }
-    }
-}

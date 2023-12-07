@@ -34,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -42,7 +41,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pokemoncards.R
-import com.example.pokemoncards.User
+import com.example.pokemoncards.data.User
 import com.example.pokemoncards.destinations.LoginScreenDestination
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -98,8 +97,8 @@ fun SignUpSection(
             ,
             fontSize = 24.sp,  // Adjust the font size
             fontWeight = FontWeight.Bold,  // Make it bold
-            fontFamily = FontFamily.Serif,  // Choose a specific font family if needed
-            color = Color.DarkGray  // Set the text color
+//            fontFamily = FontFamily.Serif,  // Choose a specific font family if needed
+//            color = Color.DarkGray  // Set the text color
         )
         Spacer(Modifier.height(16.dp))
         SignUpTextField(modifier, aValue = userid,
